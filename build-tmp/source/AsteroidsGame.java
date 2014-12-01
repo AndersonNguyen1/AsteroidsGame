@@ -70,6 +70,7 @@ public void draw()
       bigAsteroids.get(i).setDirectionY(0);
       a.setDirectionX(0);
       a.setDirectionY(0);
+      fill(255, 0, 0);
       textSize(30);
       textAlign(CENTER);
       text("Game Over", 250, 250);
@@ -223,7 +224,6 @@ class Asteroids extends Floater
     super.move();
   }
 }
-
 
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class
 {
