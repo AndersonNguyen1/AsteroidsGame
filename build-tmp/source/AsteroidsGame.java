@@ -16,17 +16,27 @@ public class AsteroidsGame extends PApplet {
 
 SpaceShip a = new SpaceShip();
 Stars[] stars = new Stars[40];
+ArrayList <Asteroids> bigAsteroids;
+boolean gameOver;
 
 public void setup()
 {
+  gameOver = false;
   background(0);
   size(500, 500);
 
   for(int i=0;i<stars.length;i++)
   {
-    stars[i]= new Stars();
+    stars[i] = new Stars();
+  }
+
+  bigAsteroids = new ArrayList <Asteroids>();
+  for(int i=0;i<10;i++)
+  {
+    bigAsteroids.add(new Asteroids());
   }
 }
+
 public void draw()
 {
   background(0);
@@ -37,7 +47,36 @@ public void draw()
   {
     stars[i].show();
   }
+
+  for(int i=0;i<bigAsteroids.size();i++)
+  {
+    if(dist(bigAsteroids.get(i).getX(),bigAsteroids.get(i).getY(), a.getX(), a.getY())<20)
+    {
+      bigAsteroids.remove(i);
+      gameOver=true;
+    }
+    else
+    {
+      bigAsteroids.get(i).show();
+      bigAsteroids.get(i).move();
+    }
+  }
+
+  if(gameOver == true)
+  {
+    for(int i=0;i<bigAsteroids.size();i++)
+    {
+      bigAsteroids.get(i).setDirectionX(0);
+      bigAsteroids.get(i).setDirectionY(0);
+      a.setDirectionX(0);
+      a.setDirectionY(0);
+      textSize(30);
+      textAlign(CENTER);
+      text("Game Over", 250, 250);
+    }
+  }
 }
+
 class SpaceShip extends Floater
 {
   SpaceShip()
@@ -113,6 +152,78 @@ class Stars
     ellipse(myX,myY,size,size);
   }
 }
+
+class Asteroids extends Floater
+{
+  private int rotSpeed;
+  public Asteroids()
+  {
+    if(Math.random()<.5f)
+    {
+      rotSpeed=2;
+    }
+
+    else
+    {
+      rotSpeed=-2;
+    }
+
+    corners = 4;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    xCorners[0] = -11;
+    yCorners[0] = -8;
+    xCorners[1] = 7;
+    yCorners[1] = -8;
+    xCorners[2] = 13;
+    yCorners[2] = 0;
+    xCorners[3] = 6;
+    yCorners[3] = 10;
+    myCenterX=(int)(Math.random()*500);
+    myCenterY=(int)(Math.random()*500);
+
+  if(Math.random()>.5f)
+  {
+    myDirectionX=1;
+  }
+
+  else
+  {
+    myDirectionX=-1;
+  }
+
+  if(Math.random()>.5f)
+  {
+    myDirectionY=1;
+  }
+
+  else
+  {
+    myDirectionY=-1;
+  }
+
+  myPointDirection=(int)(Math.random()*360);
+  myColor=color(255,255,255);
+  }
+
+  public void setX(int x){myCenterX=x;}
+  public int getX(){return (int)myCenterX;}
+  public void setY(int y){myCenterY=y;}
+  public int getY(){return (int)myCenterY;}
+  public void setDirectionX(double x){myDirectionX=x;}
+  public double getDirectionX(){return myDirectionX;}
+  public void setDirectionY(double y){myDirectionY=y;}
+  public double getDirectionY(){return myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection=degrees;}
+  public double getPointDirection(){return myPointDirection;}
+
+  public void move()
+  {
+    rotate(rotSpeed);
+    super.move();
+  }
+}
+
 
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class
 {
